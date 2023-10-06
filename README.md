@@ -6,16 +6,16 @@ USB Silent Copier is a Windows application that silently copies USB data.
 
 1. Clone the repository.
 2. Run `build.bat`.
-3. Create a task in the task scheduler:
+3. Create a task in the task scheduler (`Ctrl+R` - > `taskschd.msc`):
     - General:
         - Name: USB Silent Copier
         - Trigger: Event trigger:
             - Journal: Microsoft-Windows-DriverFrameworks-UserMode/Operational
             - Source: DriverFrameworks-UserMode
             - Event ID: 2003
-        - Don't forget to enable journal logging (Microsoft-Windows-DriverFrameworks-UserMode/Operational).
+        - Don't forget to enable journal logging (Microsoft-Windows-DriverFrameworks-UserMode/Operational), just `Ctrl+R` -> `eventvwr.msc` -> find the journal -> right click -> Properties -> Enable logging.
         - Action: Start a program:
-            - Program/script: `path_to_exe\USB Silent Copier.exe`.
+            - Program/script: `path_to_exe\usb_copier.exe`.
 
 You can skip the first two steps and just download the latest release.\
 But don't do it, who knows what's in there 😉, better build it yourself.
