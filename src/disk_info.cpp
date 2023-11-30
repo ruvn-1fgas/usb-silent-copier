@@ -95,7 +95,6 @@ void DiskInfo::CopyFilesAndDirectories(std::wstring path_to)
     {
         // Get the front path
         std::wstring path = path_queue.front();
-        std::wcout << path << '\n';
         path_queue.pop();
 
         // Find the first file in the path
@@ -110,20 +109,17 @@ void DiskInfo::CopyFilesAndDirectories(std::wstring path_to)
             {
                 // Get the file name
                 std::wstring file_name = find_data.cFileName;
-
                 // If the file is a directory
                 if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
                     // If the file is not the current or parent directory
                     if (file_name != L"." && file_name != L"..")
                     {
-                        // Push the path to the queue
                         path_queue.push(path + file_name + L"\\");
-
-                        // Create the directory in the destination path if it doesn't exist
-                        std::wstring dir_path = path_to_wide + path.substr(path_from.length());
-                        std::filesystem::create_directories(dir_path);
                     }
+                    // Create the directory in the destination path if it doesn't exist
+                    std::wstring dir_path = path_to_wide + path.substr(path_from.length());
+                    std::filesystem::create_directories(dir_path);
                 }
                 else
                 {

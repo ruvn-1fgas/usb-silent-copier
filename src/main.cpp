@@ -9,8 +9,14 @@
 
 #include "disk_info.hpp"
 
+/*
+ * Some pre-defined constants.
+ */
 const std::wstring path_to_copy = L"C:/CopiedDisks/";
 const std::wstring log_file_path = path_to_copy + L"logs.log";
+const std::wstring config_file_name = L"config.txt";
+
+// map of disk names to the time they were found
 std::map<char, SYSTEMTIME> disks_found_times;
 
 /**
@@ -85,8 +91,17 @@ std::vector<DiskInfo> GetDisksInfo(std::string disk_names)
         disk_info.serial_number = serial_number;
         disk_info.is_usb = deviceDescriptor->BusType == BusTypeUsb;
 
+        // get path to exe file
+        wchar_t path_to_exe[MAX_PATH];
+        GetModuleFileNameW(NULL, path_to_exe, MAX_PATH);
+        std::wstring path_to_exe_string(path_to_exe);
+
+        // get path to exe directory
+        std::wstring path_to_exe_directory = path_to_exe_string.substr(0, path_to_exe_string.find_last_of(L"\\/"));
+        std::wstring path_to_config = path_to_exe_directory + config_file_name;
+
         // open file ignored_serial_numbers.txt and check if the serial number is in it
-        HANDLE h_file = CreateFileW(L"config.txt", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        HANDLE h_file = CreateFileW(path_to_config.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (h_file != INVALID_HANDLE_VALUE)
         {
             // read file
